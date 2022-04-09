@@ -2,4 +2,5 @@
     <string name="app_name">Pocketbooru</string>
     <string name="signup_title">Sign up for an account</string>
     <string name="search_title">Searching for %1$s</string>
+    <string name="gallery_title">Gallery</string>
 </resources>
