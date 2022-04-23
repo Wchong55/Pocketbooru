@@ -1,5 +1,6 @@
 package com.wsc.pocketbooru
 
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -21,12 +22,12 @@ class ImageManager {
         okHttpClient = builder.build()
     }
 
-    fun retrieveSearchImages(search: String, apiKey: String): List<SearchImages> {
+    fun retrieveSearchImages(search: String, page:Int,  apiKey: String): List<SearchImages> {
         val search = search
 
         val request: Request = Request.Builder()
             //.url("https://danbooru.donmai.us/profile.json?api_key=$apiKey")
-            .url("https://danbooru.donmai.us/posts?tags=$search")
+            .url("https://danbooru.donmai.us/posts?page=$page&tags=$search")
             .get()
             .build()
 
@@ -36,10 +37,11 @@ class ImageManager {
         if (response.isSuccessful && !responseBody.isNullOrEmpty()) {
             val images = mutableListOf<SearchImages>()
             val json: JSONObject = JSONObject(responseBody)
-            val searches: JSONArray = json.getJSONArray("article")
+            val searches: JSONArray = json.getJSONArray("posts")
 
             for (i in 0 until searches.length()) {
                 val curr: JSONObject = searches.getJSONObject(i)
+                Log.d("SearchActivity", curr.getString("id"))
 
                 val url: String = curr.getString("img src")
 
@@ -55,4 +57,5 @@ class ImageManager {
 
         return listOf()
     }
+
 }
