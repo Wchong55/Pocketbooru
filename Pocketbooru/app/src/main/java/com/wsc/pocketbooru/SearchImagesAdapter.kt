@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+//import com.squareup.picasso.Picasso
 
 
 class SearchImagesAdapter(val images: List<SearchImages>) : RecyclerView.Adapter<SearchImagesAdapter.ViewHolder>() {
@@ -33,12 +33,12 @@ class SearchImagesAdapter(val images: List<SearchImages>) : RecyclerView.Adapter
         val currentImages = images[position]
 
         if (currentImages.url.isNotEmpty()) {
-            Picasso.get().setIndicatorsEnabled(true)
+            //Picasso.get().setIndicatorsEnabled(true)
 
-            Picasso
+            /*Picasso
                 .get()
                 .load(currentImages.url)
-                .into(holder.imageView)
+                .into(holder.imageView)*/
         }
     }
 
