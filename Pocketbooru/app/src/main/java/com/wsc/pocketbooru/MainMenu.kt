@@ -24,6 +24,8 @@ class MainMenu : AppCompatActivity() {
         searchBtn = findViewById(R.id.search_btn)
         galleryBtn = findViewById(R.id.saved_btn)
 
+        val username: String? = getIntent().getStringExtra("Username")
+
         searchBtn.setOnClickListener {view: View ->
             Log.d("MainMenu", "Search clicked!")
 
@@ -31,21 +33,16 @@ class MainMenu : AppCompatActivity() {
 
             val intent: Intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("SEARCH", searchTerm)
-
-            //preferences.edit().putString("SEARCH_TERM", searchTerm).apply()
-
+            intent.putExtra("Username", username)
             startActivity(intent)
         }
 
         galleryBtn.setOnClickListener {view: View ->
             Log.d("MainMenu", "Gallery clicked!")
 
-            //val intent: Intent = Intent(this, SourcesActivity::class.java)
-            //intent.putExtra("SEARCH", searchTerm)
-
-            //preferences.edit().putString("SEARCH_TERM", searchTerm).apply()
-
-            //startActivity(intent)
+            val intent: Intent = Intent(this, GalleryActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
         }
 
         searchBtn.isEnabled = false

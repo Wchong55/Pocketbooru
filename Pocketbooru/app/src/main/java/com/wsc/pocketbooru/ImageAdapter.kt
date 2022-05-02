@@ -1,28 +1,19 @@
 package com.wsc.pocketbooru
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-
-class SearchImagesAdapter(val images: List<SearchImages>, val context: Context) : RecyclerView.Adapter<SearchImagesAdapter.ViewHolder>() {
+class ImageAdapter(val images: List<SearchImages>) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     class ViewHolder(rootLayout: View) : RecyclerView.ViewHolder(rootLayout) {
         val image: ImageView = rootLayout.findViewById(R.id.image)
-        val card: CardView = rootLayout.findViewById(R.id.cardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,22 +30,13 @@ class SearchImagesAdapter(val images: List<SearchImages>, val context: Context) 
 
         //holder.bind(currentImages.get(position), itemClickListener)
 
-        if (currentImages.prevURL.isNotEmpty()) {
+        if (currentImages.URL.isNotEmpty()) {
             Picasso.get().setIndicatorsEnabled(true)
 
             Picasso
                 .get()
-                .load(currentImages.prevURL)
+                .load(currentImages.URL)
                 .into(holder.image)
-
-            holder.card.setOnClickListener { view: View ->
-                Toast.makeText(context, "Clicked on $position", Toast.LENGTH_SHORT).show()
-                val intent: Intent = Intent(context, ImageActivity::class.java)
-                intent.putExtra("URL", currentImages.URL)
-                intent.putExtra("prevURL", currentImages.prevURL)
-
-                context.startActivity(intent)
-            }
         }
     }
 

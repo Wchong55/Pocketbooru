@@ -22,12 +22,12 @@ class ImageManager {
         okHttpClient = builder.build()
     }
 
-    fun retrieveSearchImages(search: String, page:Int,  apiKey: String): List<SearchImages> {
-        val search = search
+    fun retrieveSearchImages(search: String, page:Int, apiKey: String): List<SearchImages> {
+        val searchTerm = search
 
         val request: Request = Request.Builder()
             //.url("https://danbooru.donmai.us/profile.json?api_key=$apiKey")
-            .url("https://danbooru.donmai.us/posts?page=$page&tags=$search")
+            .url("https://danbooru.donmai.us/posts.json?page=$page&tags=$searchTerm")
             .get()
             .build()
 
@@ -36,17 +36,18 @@ class ImageManager {
 
         if (response.isSuccessful && !responseBody.isNullOrEmpty()) {
             val images = mutableListOf<SearchImages>()
-            val json: JSONObject = JSONObject(responseBody)
-            val searches: JSONArray = json.getJSONArray("posts")
+            val jsonArray: JSONArray = JSONArray(responseBody)
 
-            for (i in 0 until searches.length()) {
-                val curr: JSONObject = searches.getJSONObject(i)
+            for (i in 0 until jsonArray.length()) {
+                val curr: JSONObject = jsonArray.getJSONObject(i)
                 Log.d("SearchActivity", curr.getString("id"))
 
-                val url: String = curr.getString("img src")
+                val url: String = curr.getString("file_url")
+                val previewURL: String = curr.getString("preview_file_url")
 
                 val image = SearchImages(
-                    url = url
+                    prevURL = previewURL,
+                    URL = url
                 )
 
                 images.add(image)

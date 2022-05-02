@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,10 +18,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var loginBtn: Button
     private lateinit var signupBtn: Button
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         username = findViewById(R.id.username)
         password = findViewById(R.id.password)
@@ -29,19 +34,29 @@ class MainActivity : AppCompatActivity() {
         loginBtn.setOnClickListener {view: View ->
             Log.d("MainActivity", "Log In clicked!")
 
-            val intent: Intent = Intent(this, MainMenu::class.java)
-            //intent.putExtra("SEARCH", searchTerm)
+            val inputtedUsername: String = username.text.toString()
+            val inputtedPassword: String = password.text.toString()
 
-            //preferences.edit().putString("SEARCH_TERM", searchTerm).apply()
+            firebaseAuth
+                .signInWithEmailAndPassword(inputtedUsername, inputtedPassword)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val user = firebaseAuth.currentUser
 
-            startActivity(intent)
+                        val intent: Intent = Intent(this, MainMenu::class.java)
+                        intent.putExtra("Username", user.toString())
+                        startActivity(intent)
+                    } else {
+                        val exception = task.exception
+                        Toast.makeText(this, "Failed to register $exception", Toast.LENGTH_LONG).show()
+                    }
+                }
         }
 
         signupBtn.setOnClickListener {view: View ->
             Log.d("Main Activity", "Sign Up clicked!")
 
             val intent: Intent = Intent(this, SignUpActivity::class.java)
-
             startActivity(intent)
         }
 

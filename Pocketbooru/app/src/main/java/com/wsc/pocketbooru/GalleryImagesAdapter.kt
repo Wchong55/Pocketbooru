@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 
-class SearchImagesAdapter(val images: List<SearchImages>, val context: Context) : RecyclerView.Adapter<SearchImagesAdapter.ViewHolder>() {
+class GalleryImagesAdapter(val images: List<GalleryImages>, val context: Context) : RecyclerView.Adapter<GalleryImagesAdapter.ViewHolder>() {
 
     class ViewHolder(rootLayout: View) : RecyclerView.ViewHolder(rootLayout) {
         val image: ImageView = rootLayout.findViewById(R.id.image)
@@ -49,7 +49,7 @@ class SearchImagesAdapter(val images: List<SearchImages>, val context: Context) 
 
             holder.card.setOnClickListener { view: View ->
                 Toast.makeText(context, "Clicked on $position", Toast.LENGTH_SHORT).show()
-                val intent: Intent = Intent(context, ImageActivity::class.java)
+                val intent: Intent = Intent(context, GalleryActivity::class.java)
                 intent.putExtra("URL", currentImages.URL)
                 intent.putExtra("prevURL", currentImages.prevURL)
 

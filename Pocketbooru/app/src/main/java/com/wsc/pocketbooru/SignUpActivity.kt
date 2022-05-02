@@ -9,6 +9,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -16,10 +21,13 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var repass: EditText
     private lateinit var signupBtn: Button
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         username = findViewById(R.id.username_sign_up)
         password = findViewById(R.id.password_sign_up)
@@ -29,12 +37,31 @@ class SignUpActivity : AppCompatActivity() {
         signupBtn.setOnClickListener {view: View ->
             Log.d("SignUpActivity", "Sign Up clicked!")
 
-            val intent: Intent = Intent(this, MainActivity::class.java)
-            //intent.putExtra("SEARCH", searchTerm)
+            val inputtedUsername: String = username.text.toString()
+            val inputtedPassword: String = password.text.toString()
 
-            //preferences.edit().putString("SEARCH_TERM", searchTerm).apply()
+            firebaseAuth
+                .createUserWithEmailAndPassword(inputtedUsername, inputtedPassword)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Successfully registered as $inputtedUsername", Toast.LENGTH_LONG).show()
 
-            startActivity(intent)
+                        val intent: Intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else {
+                        val exception = task.exception
+                        if (exception is FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(this, "Your email is badly formatted", Toast.LENGTH_LONG).show()
+                        } else if (exception is FirebaseAuthUserCollisionException) {
+                            Toast.makeText(this, "A user already exists with this email", Toast.LENGTH_LONG).show()
+                        } else if (exception is FirebaseAuthWeakPasswordException) {
+                            Toast.makeText(this, "Your password must be at least 6 characters long", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(this, "Failed to register!", Toast.LENGTH_LONG).show()
+                        }
+                    }
+            }
         }
 
         signupBtn.isEnabled = false

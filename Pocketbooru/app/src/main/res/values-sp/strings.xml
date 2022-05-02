@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pocketbooru</string>
+    <string name="signup_title">Inscribe una cuenta</string>
+    <string name="search_title">Buscando por %1$s</string>
+    <string name="gallery_title">Galleria</string>
+</resources>
